@@ -1,1 +1,311 @@
+from pathlib import Path
+
+html = r"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QRI — Quantum Resource Intelligence</title>
+  <meta name="description" content="QRI — Quantum Resource Intelligence. ASIDN Architecture: Intelligence, Assets, Strategy, Digital, Nexus. SaaS + Recycling + Pilots." />
+  <style>
+    /* Base */
+    :root{
+      --bg:#071022; --card:#0b1a2b; --muted:#9bb0c2; --accent:#00D084; --accent2:#0077FF;
+      --glass:rgba(255,255,255,0.03); --card-2:#0f2938; --danger:#FF4D4F;
+      --pill-font: 14px/1 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,system-ui, -apple-system, "Segoe UI", Roboto, Arial;color:#e6f0f6;background:linear-gradient(180deg,var(--bg) 0%, #031324 100%);-webkit-font-smoothing:antialiased}
+    .wrap{max-width:1200px;margin:28px auto;padding:20px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    /* Logo animation */
+    .logo-svg{width:72px;height:72px}
+    .brand h1{margin:0;font-size:18px;letter-spacing:0.3px}
+    nav{display:flex;gap:10px;align-items:center}
+    a.btn{padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#001;padding:10px 16px;border-radius:10px;box-shadow:0 6px 18px rgba(0,208,132,0.08)}
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:26px;margin-top:18px;align-items:start}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:22px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.65);border:1px solid rgba(255,255,255,0.02)}
+    .lead{color:var(--muted);margin-top:8px}
+    .kpi-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .kpi{background:var(--card-2);padding:10px;border-radius:10px;min-width:120px;text-align:center}
+    .kpi strong{display:block;font-size:20px;color:var(--accent)}
+    /* ASIDN pentagon hero visualization */
+    .pentagon-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+    .pentagon-svg{width:320px;height:280px}
+    /* Pillars grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+    .pillar{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:14px;border-radius:10px;display:flex;gap:12px;align-items:center}
+    .mini{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#001;font-size:16px}
+    .pill-title{font-weight:700}
+    .pill-sub{color:var(--muted);font-size:13px;margin-top:4px}
+    /* CTA */
+    .cta-large{display:flex;gap:12px;align-items:center;margin-top:12px}
+    /* Footer */
+    footer{margin-top:28px;color:var(--muted);font-size:13px}
+    /* Responsiveness */
+    @media(max-width:980px){.hero{grid-template-columns:1fr} .grid{grid-template-columns:1fr} .brand h1{font-size:16px} .pentagon-svg{width:240px;height:200px} }
+    /* subtle animations */
+    .floaty{animation:float 6s ease-in-out infinite}
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+    /* Pill colors */
+    .c-A{background:linear-gradient(180deg,#00D084,#00b06a);} .c-S{background:linear-gradient(180deg,#0077FF,#005bd6);} .c-I{background:linear-gradient(180deg,#ffd36b,#ffb84d);} .c-D{background:linear-gradient(180deg,#8b5cf6,#6a3bd9);} .c-N{background:linear-gradient(180deg,#ff6b6b,#ff3b3b);}
+    .mini-letter{color:#001;font-weight:800}
+    /* Pill icon small */
+    .icon-circle{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#001;margin-right:8px}
+    /* Contact form */
+    .form-row{display:flex;gap:8px;flex-wrap:wrap}
+    input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;resize:vertical}
+    label{font-size:13px;color:var(--muted)}
+    /* small table */
+    .kv{background:#001520;padding:6px 8px;border-radius:6px;color:#9be7c9;font-family:monospace;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <!-- Animated SVG logo inspired by provided image (ASIDN pentagon + Q mark) -->
+        <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- pentagon ring -->
+          <defs>
+            <linearGradient id="gA" x1="0" x2="1"><stop offset="0" stop-color="#00D084"/><stop offset="1" stop-color="#00b06a"/></linearGradient>
+            <linearGradient id="gS" x1="0" x2="1"><stop offset="0" stop-color="#0077FF"/><stop offset="1" stop-color="#005bd6"/></linearGradient>
+            <linearGradient id="gI" x1="0" x2="1"><stop offset="0" stop-color="#ffd36b"/><stop offset="1" stop-color="#ffb84d"/></linearGradient>
+            <linearGradient id="gD" x1="0" x2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6a3bd9"/></linearGradient>
+            <linearGradient id="gN" x1="0" x2="1"><stop offset="0" stop-color="#ff6b6b"/><stop offset="1" stop-color="#ff3b3b"/></linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="blur"/></filter>
+          </defs>
+          <!-- pentagon shape -->
+          <g transform="translate(100,60)">
+            <polygon points="0,-60 57,-20 35,49 -35,49 -57,-20" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4" />
+            <!-- nodes -->
+            <g id="nodes">
+              <circle cx="0" cy="-60" r="8" fill="url(#gI)" class="floaty"/>
+              <circle cx="57" cy="-20" r="8" fill="url(#gA)" class="floaty" style="animation-delay:0.1s"/>
+              <circle cx="35" cy="49" r="8" fill="url(#gS)" class="floaty" style="animation-delay:0.2s"/>
+              <circle cx="-35" cy="49" r="8" fill="url(#gD)" class="floaty" style="animation-delay:0.3s"/>
+              <circle cx="-57" cy="-20" r="8" fill="url(#gN)" class="floaty" style="animation-delay:0.4s"/>
+            </g>
+            <!-- central Q mark (animated strokes) -->
+            <g id="qmark" transform="translate(0,0)">
+              <circle cx="0" cy="0" r="30" stroke="#0b2030" stroke-width="10" fill="none" />
+              <circle cx="0" cy="0" r="12" fill="#00D084" />
+              <rect x="22" y="14" width="8" height="28" rx="4" transform="rotate(30 26 28)" fill="#0b2030" />
+            </g>
+          </g>
+        </svg>
+
+        <div>
+          <h1>Quantum Resource Intelligence <span style="font-weight:600;color:var(--muted);font-size:12px;display:block">ASIDN Architecture — Intelligence-first</span></h1>
+        </div>
+      </div>
+
+      <nav>
+        <a class="btn btn-ghost" href="#architecture">ASIDN</a>
+        <a class="btn btn-ghost" href="#products">Products</a>
+        <a class="btn btn-ghost" href="#solutions">Solutions</a>
+        <a class="btn btn-primary" href="#contact">Request Pilot</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <h2 style="margin:0">Measure. Analyze. Dominate every resource.</h2>
+        <p class="lead">If it flows, moves, burns, or shines — QRI quantifies it. One intelligence layer for Power, Water, Fuel, Solar, Storage & Circular systems.</p>
+
+        <div class="kpi-row">
+          <div class="kpi"><span style="color:var(--muted)">Pilots</span><strong>1 (MVP)</strong><span style="display:block;color:var(--muted);font-size:13px">Target: 10 in 90 days</span></div>
+          <div class="kpi"><span style="color:var(--muted)">Avg Savings</span><strong>12%</strong><span style="display:block;color:var(--muted);font-size:13px">Energy (est)</span></div>
+          <div class="kpi"><span style="color:var(--muted)">Carbon</span><strong>tCO₂e</strong><span style="display:block;color:var(--muted);font-size:13px">Verified baseline</span></div>
+        </div>
+
+        <div style="margin-top:14px">
+          <p class="lead">ASIDN Architecture — <strong>Intelligence → Assets → Strategy → Digital → Nexus</strong></p>
+          <div class="cta-large">
+            <a class="btn btn-primary" href="#contact">Start Pilot — ₹14,999</a>
+            <a class="btn btn-ghost" href="#architecture">See ASIDN</a>
+          </div>
+        </div>
+
+        <div style="margin-top:16px" class="pentagon-wrap">
+          <!-- Animated pentagon (larger) -->
+          <svg class="pentagon-svg" viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gA2"><stop offset="0" stop-color="#00D084"/><stop offset="1" stop-color="#00b06a"/></linearGradient>
+              <linearGradient id="gS2"><stop offset="0" stop-color="#0077FF"/><stop offset="1" stop-color="#005bd6"/></linearGradient>
+              <linearGradient id="gI2"><stop offset="0" stop-color="#ffd36b"/><stop offset="1" stop-color="#ffb84d"/></linearGradient>
+              <linearGradient id="gD2"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6a3bd9"/></linearGradient>
+              <linearGradient id="gN2"><stop offset="0" stop-color="#ff6b6b"/><stop offset="1" stop-color="#ff3b3b"/></linearGradient>
+            </defs>
+            <g transform="translate(180,80)">
+              <polygon points="0,-80 76,-28 46,86 -46,86 -76,-28" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6" />
+              <!-- nodes colored -->
+              <circle cx="0" cy="-80" r="10" fill="url(#gI2)">
+                <animate attributeName="r" values="10;14;10" dur="5s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="76" cy="-28" r="10" fill="url(#gA2)"><animate attributeName="cy" values="-28;-32;-28" dur="6s" repeatCount="indefinite" /></circle>
+              <circle cx="46" cy="86" r="10" fill="url(#gS2)"><animate attributeName="cx" values="46;52;46" dur="5.5s" repeatCount="indefinite" /></circle>
+              <circle cx="-46" cy="86" r="10" fill="url(#gD2)"><animate attributeName="cx" values="-46;-50;-46" dur="5.2s" repeatCount="indefinite" /></circle>
+              <circle cx="-76" cy="-28" r="10" fill="url(#gN2)"><animate attributeName="cy" values="-28;-24;-28" dur="6.2s" repeatCount="indefinite" /></circle>
+              <!-- central Q -->
+              <g transform="translate(0,0)">
+                <circle cx="0" cy="0" r="44" stroke="#0b2030" stroke-width="14" fill="none" />
+                <circle cx="0" cy="0" r="16" fill="#00D084" />
+                <rect x="36" y="24" width="10" height="36" rx="5" transform="rotate(30 41 42)" fill="#0b2030" />
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <aside class="card">
+        <h3 style="margin-top:0">Quick MVP checklist</h3>
+        <ul class="lead" style="padding-left:18px;margin-top:8px">
+          <li>Landing + Lead form ✅</li>
+          <li>Power Dashboard (Excel → Embed) ✅</li>
+          <li>Water & Fuel templates ✅</li>
+          <li>Billing audit template ✅</li>
+          <li>Recycling feasibility doc ✅</li>
+          <li>Stripe/Razorpay integration ⏳</li>
+          <li>First paid pilot (target: 1) ⏳</li>
+        </ul>
+
+        <div style="margin-top:12px">
+          <div class="muted" style="color:var(--muted)">MVP goals</div>
+          <div style="font-size:18px;font-weight:700;margin-top:6px">Get 1 paid pilot, close 3 paying monthly customers within 90 days.</div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="architecture" style="margin-top:22px">
+      <div class="card">
+        <h2 style="margin-top:0">ASIDN Architecture — Intelligence → Assets → Strategy → Digital → Nexus</h2>
+        <p class="lead">ASIDN is the five-layer blueprint that turns meters into decisions, assets into value, and resources into resilient, low-carbon systems.</p>
+
+        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+          <div class="card" style="text-align:center;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005))">
+            <div class="icon-circle" style="background:linear-gradient(180deg,#ffd36b,#ffb84d)">I</div>
+            <div class="pill-title" style="margin-top:8px">Intelligence</div>
+            <div class="pill-sub">KPI engine · AI Ops · Savings Verifier</div>
+          </div>
+          <div class="card" style="text-align:center;padding:12px">
+            <div class="icon-circle" style="background:linear-gradient(180deg,#00D084,#00b06a)">A</div>
+            <div class="pill-title" style="margin-top:8px">Assets</div>
+            <div class="pill-sub">CMMS · Earthing · Audits</div>
+          </div>
+          <div class="card" style="text-align:center;padding:12px">
+            <div class="icon-circle" style="background:linear-gradient(180deg,#0077FF,#005bd6)">S</div>
+            <div class="pill-title" style="margin-top:8px">Strategy</div>
+            <div class="pill-sub">BESS · Carbon · RE Roadmaps</div>
+          </div>
+          <div class="card" style="text-align:center;padding:12px">
+            <div class="icon-circle" style="background:linear-gradient(180deg,#8b5cf6,#6a3bd9)">D</div>
+            <div class="pill-title" style="margin-top:8px">Digital</div>
+            <div class="pill-sub">Twins · Trading · ToD</div>
+          </div>
+          <div class="card" style="text-align:center;padding:12px">
+            <div class="icon-circle" style="background:linear-gradient(180deg,#ff6b6b,#ff3b3b)">N</div>
+            <div class="pill-title" style="margin-top:8px">Nexus</div>
+            <div class="pill-sub">Microgrids · Recycling · Water</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" style="margin-top:18px">
+      <h2>Products — A → Z</h2>
+      <p class="lead">A full suite of modules you can pick individually or as part of the ASIDN stack.</p>
+
+      <div class="grid">
+        <!-- Repeat pillars A-Z compactly -->
+        <div class="pillar"><div class="mini c-A"><span class="mini-letter">A</span></div><div><div class="pill-title">Asset Intelligence</div><div class="pill-sub">CMDB, CMMS, Earthing</div></div></div>
+        <div class="pillar"><div class="mini c-S"><span class="mini-letter">B</span></div><div><div class="pill-title">Battery & Storage</div><div class="pill-sub">Sizing · Dispatch</div></div></div>
+        <div class="pillar"><div class="mini c-I"><span class="mini-letter">C</span></div><div><div class="pill-title">Carbon & ESG</div><div class="pill-sub">GHG Ledger</div></div></div>
+        <div class="pillar"><div class="mini c-D"><span class="mini-letter">D</span></div><div><div class="pill-title">Digital Twin</div><div class="pill-sub">Simulation · ROI</div></div></div>
+        <div class="pillar"><div class="mini c-N"><span class="mini-letter">E</span></div><div><div class="pill-title">Energy Trading</div><div class="pill-sub">OA · LMP</div></div></div>
+
+        <div class="pillar"><div class="mini c-A"><span class="mini-letter">F</span></div><div><div class="pill-title">Fuel & Fleet</div><div class="pill-sub">Trip · DG</div></div></div>
+        <div class="pillar"><div class="mini c-S"><span class="mini-letter">G</span></div><div><div class="pill-title">Grid & Open Access</div><div class="pill-sub">Feasibility</div></div></div>
+        <div class="pillar"><div class="mini c-I"><span class="mini-letter">H</span></div><div><div class="pill-title">Hydrogen Lab</div><div class="pill-sub">LCOH</div></div></div>
+        <div class="pillar"><div class="mini c-D"><span class="mini-letter">I</span></div><div><div class="pill-title">Industrial AI Ops</div><div class="pill-sub">Predictive</div></div></div>
+        <div class="pillar"><div class="mini c-N"><span class="mini-letter">J</span></div><div><div class="pill-title">Jurisdiction Console</div><div class="pill-sub">Tariffs</div></div></div>
+
+        <div class="pillar"><div class="mini c-A"><span class="mini-letter">K</span></div><div><div class="pill-title">Kilowatt/Kilolitre</div><div class="pill-sub">Normalization</div></div></div>
+        <div class="pillar"><div class="mini c-S"><span class="mini-letter">L</span></div><div><div class="pill-title">Load Shifting</div><div class="pill-sub">ToD Scheduler</div></div></div>
+        <div class="pillar"><div class="mini c-I"><span class="mini-letter">M</span></div><div><div class="pill-title">Microgrids</div><div class="pill-sub">Hybrid</div></div></div>
+        <div class="pillar"><div class="mini c-D"><span class="mini-letter">N</span></div><div><div class="pill-title">Recycling Marketplace</div><div class="pill-sub">EoL routing</div></div></div>
+        <div class="pillar"><div class="mini c-N"><span class="mini-letter">O</span></div><div><div class="pill-title">Resilience & Climate</div><div class="pill-sub">BCP</div></div></div>
+
+        <div class="pillar"><div class="mini c-A"><span class="mini-letter">P</span></div><div><div class="pill-title">Power Quality</div><div class="pill-sub">Forensics</div></div></div>
+        <div class="pillar"><div class="mini c-S"><span class="mini-letter">Q</span></div><div><div class="pill-title">Quantified Savings</div><div class="pill-sub">Bankable</div></div></div>
+        <div class="pillar"><div class="mini c-I"><span class="mini-letter">R</span></div><div><div class="pill-title">Market Intelligence</div><div class="pill-sub">Price feeds</div></div></div>
+        <div class="pillar"><div class="mini c-D"><span class="mini-letter">S</span></div><div><div class="pill-title">Solar Performance</div><div class="pill-sub">PR & Degradation</div></div></div>
+        <div class="pillar"><div class="mini c-N"><span class="mini-letter">T</span></div><div><div class="pill-title">Thermal Efficiency</div><div class="pill-sub">Boiler & Steam</div></div></div>
+
+        <div class="pillar"><div class="mini c-A"><span class="mini-letter">U</span></div><div><div class="pill-title">Urban OS</div><div class="pill-sub">City command</div></div></div>
+        <div class="pillar"><div class="mini c-S"><span class="mini-letter">V</span></div><div><div class="pill-title">Verification Hub</div><div class="pill-sub">Audits</div></div></div>
+        <div class="pillar"><div class="mini c-I"><span class="mini-letter">W</span></div><div><div class="pill-title">Water Intelligence</div><div class="pill-sub">Leak & Pump</div></div></div>
+        <div class="pillar"><div class="mini c-D"><span class="mini-letter">X</span></div><div><div class="pill-title">Exchange & Credits</div><div class="pill-sub">Carbon/REC</div></div></div>
+        <div class="pillar"><div class="mini c-N"><span class="mini-letter">Y</span></div><div><div class="pill-title">Yield Optimization</div><div class="pill-sub">Profit per unit</div></div></div>
+
+        <div class="pillar"><div class="mini c-A"><span class="mini-letter">Z</span></div><div><div class="pill-title">Zero-Emission Roadmap</div><div class="pill-sub">Net-zero plans</div></div></div>
+      </div>
+    </section>
+
+    <section id="solutions" style="margin-top:18px">
+      <h2>Solutions & Use-cases</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <div class="card"><strong>Energy Cost Reduction</strong><div class="pill-sub">ToD, BESS, OA — reduce monthly bills</div></div>
+        <div class="card"><strong>Renewable Strategy</strong><div class="pill-sub">RE roadmaps, BESS, hydrogen</div></div>
+        <div class="card"><strong>Maintenance & CMMS</strong><div class="pill-sub">Predictive maintenance & audits</div></div>
+        <div class="card"><strong>Carbon & ESG</strong><div class="pill-sub">Automated carbon accounting</div></div>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:18px">
+      <h2>Request Pilot / Contact</h2>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:1;min-width:280px">
+          <p class="lead">Start with a 4-week pilot: we deliver verified savings, a 12‑month roadmap, and an executive pack.</p>
+          <ul class="lead" style="padding-left:18px">
+            <li>Minimal data required</li>
+            <li>No capex</li>
+            <li>Fast ROI</li>
+          </ul>
+          <p style="margin-top:8px"><strong>Download full dossier:</strong> <a class="kv" href="sandbox:/mnt/data/QRI_Complete_Master_Dossier.pdf" target="_blank">Master Dossier (PDF)</a></p>
+          <p><strong>Or download condensed brief:</strong> <a class="kv" href="sandbox:/mnt/data/QRI_Strategic_Blueprint.pdf" target="_blank">Strategic Blueprint (PDF)</a></p>
+        </div>
+
+        <form onsubmit="event.preventDefault();alert('Demo: pilot request received. Implement form backend to capture leads.');" style="min-width:260px;flex:1">
+          <label>Company</label><input required placeholder="Company name" />
+          <label style="margin-top:8px">Contact name</label><input required placeholder="Your name" />
+          <label style="margin-top:8px">Email</label><input required type="email" placeholder="email@company.com" />
+          <label style="margin-top:8px">Industry</label><select><option>Manufacturing</option><option>Hospital</option><option>College/Campus</option><option>Utility</option></select>
+          <label style="margin-top:8px">Message</label><textarea placeholder="Brief project info" rows="4"></textarea>
+          <div style="margin-top:8px"><button class="btn btn-primary" type="submit">Request Pilot</button></div>
+        </form>
+      </div>
+    </section>
+
+    <footer style="margin-top:22px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>© <strong>Quantum Resource Intelligence (QRI)</strong> — Built by Akhilroy Jangam.</div>
+        <div style="color:var(--muted)">Contact: hello@qri.global · Privacy · Terms</div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
+"""
+
+# write file
+out = Path("/mnt/data/qri_website_mvp.html")
+out.write_text(html, encoding="utf-8")
+
+# also provide a small zip of assets if needed (none here)
+"/mnt/data/qri_website_mvp.html"
+
 
